@@ -6,6 +6,7 @@ RED (R)
 BLUE (B)
 GREEN (G)
 YELLOW (Y)
+
 Their world consists of an 8x8 square "Arena" which looks suspiciously like a chess-board. The
 Arena is surrounded by water on all sides.
 The 64 tiles on the board are identified with (row, col) co-ordinates with (0,0) being the top left tile
