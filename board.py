@@ -31,6 +31,8 @@ class Board:
 		else:
 			raise Exception(Template("position [$x,$y] already has an item").substitute(x=x_pos, y=y_pos))		
 
+	def find_knight_by_color(self, color):
+		return next((x for x in self.squares if x['tile'] != None and x['tile'].color == color), None)
 
 	def move(self, knight, color, direction):
 		# find dict containing knight with that color
