@@ -1,74 +1,208 @@
 from string import Template
+from collections import OrderedDict
+import numpy as np
+
 
 class Board:
-	def __init__(self, size):
-		self.size = size
-		self.square_size = size  ** 2
-		self.squares = [dict(tile=None,item=None) for x in range(self.square_size)]
 
+    def __init__(self, size):
+        self.size = size
+        self.square_size = size**2
+        self.squares = np.array_split(
+            [dict(tile=None, items=[]) for x in range(self.square_size)], 8)
 
-	def add_knight(self, knight, x_pos, y_pos):
-		position = x_pos + 1  * y_pos + 1
-		if (position < 0  or position > self.size) :
-			raise Exception(Template("knight cannot be placed in given position [$x,$y], $s ").substitute(x=x_pos,y=y_pos, s=position))
-		square = self.squares[position]
-		if(square['tile'] == None):
-			square['tile']  = knight 
-			position_str = Template('[$x, $y]').substitute(x=x_pos, y=y_pos)
-			knight.position = [x_pos, y_pos]
-			knight.position_str = position_str
-		else:
-			raise Exception(Template("position [$x,$y] already has an knight").substitute(x=x_pos, y=y_pos))
+    def get_square(self, x, y):
+        if ((x >= self.size or y >= self.size) or (x < 0 or y < 0)):
+            return None
+        else:
+            return self.squares[x][y]
 
-	def add_item(self, item, x_pos, y_pos):
-		position = x_pos + 1  * y_pos + 1
-		if (position < 0  or position > self.size) :
-			raise Exception(Template("element cannot be placed in given position [$x,$y], $s ").substitute(x=x_pos,y=y_pos, s=position))
-		square = self.squares[position]
-		if(square['item'] == None):
-			square['item']  = item 
-			pos = Template('[$x, $y]').substitute(x=x_pos, y=y_pos)
-		else:
-			raise Exception(Template("position [$x,$y] already has an item").substitute(x=x_pos, y=y_pos))		
+    def add_knight(self, knight, x_pos, y_pos):
+        square = self.get_square(x_pos, y_pos)
+        if (square == None):
+            raise Exception(
+                Template(
+                    "knight cannot be placed in given position [$x,$y], $s").
+                substitute(x=x_pos, y=y_pos, s=square))
+        if (square['tile'] == None):
+            knight.change_coordinates(x_pos, y_pos)
+            square['tile'] = knight
+            print('Added: knight(%s-%s) at (%s, %s)' %
+                  (knight.color, knight.symbol, knight.x, knight.y))
 
-	def find_knight_by_color(self, color):
-		return next((x for x in self.squares if x['tile'] != None and x['tile'].color == color), None)
+        else:
+            raise Exception(
+                Template("position [$x,$y] already has an knight").substitute(
+                    x=x_pos, y=y_pos))
 
-	def move(self, knight, color, direction):
-		# find dict containing knight with that color
-		# computer new position
-		# move to new position
-		current_position = knight.position
-		x = new_position[0] # horizontal
-		y = new_position[1] # vertical
-		new_coordinates = None
-		new_position = None
+    def sort_items(self, square):
+        square['items'] = sorted(
+            square['items'],
+            key=lambda x: x.ordering,
+        )  #sort by ordering
 
-		if(direction == 'N'):
-			print('move up')
-			new_coordinates = [x, y + 1]
-		elif(direction == 'S'):
-			print('move down')
-			new_coordinates = [x, y - 1]
-		if(direction == 'E'):
-			print('move east')
-			new_coordinates = [x - 1, y]
-		if(direction == 'W'):
-			print('move west')
-			new_coordinates = [x + 1, y]			
-		new_position =new_coordinates[0] * new_coordinates[1]
+    def add_item(self, item, x_pos, y_pos):
+        square = self.get_square(x_pos, y_pos)
+        square['items'].append(item)
+        self.sort_items(square)
+        item.x = x_pos
+        item.y = y_pos
+        print('Added: item(%s-%s) at (%s, %s):(Attack:%s , Defend:%s)' %
+              (item.name, item.symbol, item.x, item.y, item.attack_points,
+               item.defend_points))
 
-		if (new_position < 0  or new_position > self.size):
-		#If a knight moves off the board then they are swept away and drown immediately. Further moves
-		#do not apply to DROWNED knights. The final position of a DROWNED knight is null.	
-			print('DROWN')
-	
-		else:
-			print('CHANGE POSITION')
+    def find_square_by_knight_symbol(self, symbol):
+        square = None
+        for squareGroup in self.squares:
+            # print('group size', len(squareGroup), square)
+            if (square != None):
+                # print('found')
+                break
+            square = next(
+                (x for x in squareGroup
+                 if x['tile'] != None and x['tile'].symbol == symbol), None)
 
-	def __str__(self):
-		output = Template('$size => $square')
-		formatted_output = output.substitute(size= self.size,square=self.squares)
-		return formatted_output
+        return square
 
+    def getNextMoveCoordinates(self, x, y, direction):
+        new_coordinates = None
+        if (direction == 'E'):
+            # move east
+            new_coordinates = [x, y + 1]
+        elif (direction == 'W'):
+            # move west
+            new_coordinates = [x, y - 1]
+        elif (direction == 'N'):
+            # move north
+            new_coordinates = [x - 1, y]
+        elif (direction == 'S'):
+            # move south
+            new_coordinates = [x + 1, y]
+        else:
+            raise Exception('Direction must only be one of (N,S,E,W), given',
+                            direction)
+        new_x = new_coordinates[0]
+        new_y = new_coordinates[1]
+        res = dict(x=new_x,
+                   y=new_y,
+                   coordinates=[x, y],
+                   dest_square=self.get_square(new_x, new_y),
+                   to=[new_x, new_y])
+        return res
 
+    def changeKnightStatus(self, dest_square, status):
+        ACCEPTED_STATUSES = ['DROWNED', 'DEAD']
+        if (dest_square['tile'] != None and status in ACCEPTED_STATUSES):
+            knight = dest_square['tile']
+            item = knight.item
+            if (item != None):
+                if (status == ACCEPTED_STATUSES[0]):
+                    #Knights that drown throw their item to the bank
+                    item.equiped = False
+                    item.x = knight.x
+                    item.y = knight.y
+                    dest_square['items'].append(item)
+                    self.sort_items(dest_square)
+
+                elif (status == ACCEPTED_STATUSES[1]):
+                    #Knights that die in battle drop their item (if they have one)
+                    item.equiped = False
+                    item.x = None
+                    item.y = None
+                    dest_square['items'].pop(0)
+            dest_square['items'].append(item)  #leave items before drowning
+            knight.item = None
+            knight.status = status
+            knight.change_coordinates(None, None)
+            knight.base_attack_score = 0
+            knight.base_defend_score = 0
+            dest_square['tile'] = None
+            print('status change: knight(%s-%s) status(%s), %s)' %
+                  (knight.color, knight.symbol, knight.status, knight.item))
+        else:
+            raise Exception('Unsopported status')
+
+    def move(self, symbol, direction):
+        origin_square = self.find_square_by_knight_symbol(symbol)
+        # print('found', self.find_square_by_knight_symbol(symbol))
+        # print(origin_square['tile'])
+        # origin_square = self.squares[knight_current_position]
+        if (origin_square != None):
+            #knight exists
+            knight = origin_square['tile']
+            # current_position = self.get_square(knight.x, knight.y)
+            nextMove = self.getNextMoveCoordinates(
+                knight.x,
+                knight.y,  #TODO  ISSUE HERE FINDING THE NEXT POST
+                direction)
+            # print('nextMove', nextMove)
+            dest_square = nextMove['dest_square']
+            if (dest_square == None):
+                # tile does not exist drowning
+                self.changeKnightStatus(origin_square, 'DROWNED')
+            else:
+                # tile exist
+                dest_items = dest_square['items']
+                item = next(iter(dest_items), None)
+                #inherit item in given order
+                if (knight.item == None and item != None
+                        and item.equiped == False):
+                    item.equiped = True
+                    knight.item = item
+                    dest_square['items'].pop(0)
+                    print(
+                        'earned: knight(%s-%s) item(%s-%s) with (attack:%s-defense:%s) at (%s, %s)'
+                        % (knight.color, knight.symbol, item.name, item.symbol,
+                           knight.total_attack_score(),
+                           knight.total_defend_score(), item.x, item.y))
+
+                #defending knight
+                def_knight = dest_square['tile']
+                if (def_knight != None):
+                    attack_res = knight.attack(def_knight)
+                    if (attack_res):
+                        # attacker win, movement
+                        self.changeKnightStatus(dest_square, 'DEAD')
+                        origin_square['tile'] = None
+                        dest_square['tile'] = knight
+                        print(
+                            'moved-attacker win: knight(%s-%s) with attack(%s) vs defense(%s)'
+                            % (knight.color, knight.symbol,
+                               knight.total_attack_score(),
+                               def_knight.total_attack_score()))
+                        print(
+                            'moved(%s): knight(%s-%s) from(%s, %s) => to(%s, %s)'
+                            %
+                            (direction, knight.color, knight.symbol, knight.x,
+                             knight.y, nextMove['x'], nextMove['y']))
+                        knight.change_coordinates(nextMove['x'], nextMove['y'])
+                    else:
+                        # defender win, no movement
+                        self.changeKnightStatus(origin_square, 'DEAD')
+                        origin_square['tile'] = None
+                        print(
+                            'stayed-defender win: knight(%s-%s) with attack(%s) vs defense(%s)'
+                            % (knight.color, knight.symbol,
+                               knight.total_attack_score(),
+                               def_knight.total_defend_score()))
+                else:
+                    print(
+                        'moved(%s): knight(%s-%s) from(%s, %s) => to(%s, %s)' %
+                        (direction, knight.color, knight.symbol, knight.x,
+                         knight.y, nextMove['x'], nextMove['y']))
+                    knight.change_coordinates(nextMove['x'], nextMove['y'])
+                    origin_square['tile'] = None
+                    dest_square['tile'] = knight
+
+    def output(self, knights_or_items):
+        output = OrderedDict()
+        for k in knights_or_items:
+            output[k.get_name()] = k.output()
+
+        return output
+
+    def __str__(self):
+        output = Template('$size => $square')
+        formatted_output = output.substitute(size=self.square_size,
+                                             square=self.squares)
+        return formatted_output
