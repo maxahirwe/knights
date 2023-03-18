@@ -20,15 +20,17 @@ Y (0,7) (top right)
 ## Items
 
 Around the board are the following four items.
-Axe (A): +2 Attack
-Dagger (D): +1 Attack
-Helmet (H): +1 Defence
-MagicStaff (M): +1 Attack, +1 Defence
+Axe (A): +2 Attack => (2,2)
+Dagger (D): +1 Attack => (2,5)
+Helmet (H): +1 Defence => (5,5)
+MagicStaff (M): +1 Attack, +1 Defence => (5,2)
+
 They start at the following locations:
 Axe (A) (2,2)
 Dagger (D) (2,5)
-MagicStaff (M) (5,2)
 Helmet (H) (5,5)
+MagicStaff (M) (5,2)
+
 If a Knight moves onto a tile with an item they are immediately equipped with that item, gaining
 the bonus. A Knight may only hold one item. If a knight with an item moves over another item
 then they ignore it. If a knight moves onto a tile which has two items on it then they pick up the
