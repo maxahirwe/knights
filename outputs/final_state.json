@@ -1,0 +1,67 @@
+{
+  "red": [
+    [
+      2,
+      0
+    ],
+    "LIVE",
+    null,
+    1,
+    1
+  ],
+  "blue": [
+    [
+      7,
+      1
+    ],
+    "LIVE",
+    null,
+    1,
+    1
+  ],
+  "green": [
+    [
+      6,
+      7
+    ],
+    "LIVE",
+    null,
+    1,
+    1
+  ],
+  "yellow": [
+    null,
+    "DROWN",
+    null,
+    0,
+    0
+  ],
+  "magicstaff": [
+    [
+      5,
+      2
+    ],
+    false
+  ],
+  "helmet": [
+    [
+      5,
+      5
+    ],
+    false
+  ],
+  "dagger": [
+    [
+      2,
+      5
+    ],
+    false
+  ],
+  "axe": [
+    [
+      2,
+      2
+    ],
+    false
+  ]
+}

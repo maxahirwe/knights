@@ -3,8 +3,11 @@ from knight import Knight
 from item import Item
 
 board = Board(3)
+
 blue = Knight('Blue', 'B')
 red = Knight('Red', 'R')
+
+knights = [blue]
 
 item = Item('Axe', 'A', 2, 0, 1)
 
@@ -15,7 +18,7 @@ board.add_item(item, 1, 2)
 
 foundKnight = board.find_knight_by_symbol('B')['tile']
 
-print(foundKnight.getCordinates())
+print(foundKnight.get_cordinates())
 
 print(board)
 
@@ -23,9 +26,10 @@ board.move(board.get_arr_pos(foundKnight.x, foundKnight.y), 'N')
 board.move(board.get_arr_pos(foundKnight.x, foundKnight.y), 'N')
 
 print(board)
-
 print(blue)
 
+print(board.output(knights))
+# board.output(knights)
 # board.move(board.get_arr_pos(foundKnight.x, foundKnight.y), 'W')
 
 # board.add_knight(red, 1, 2)

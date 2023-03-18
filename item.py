@@ -11,12 +11,19 @@ class Item:
         self.ordering = ordering
         self.x = None
         self.y = None
+        self.equiped = False
 
-    def getCordinates(self):
+    def get_name(self):
+        return self.name.lower()
+
+    def get_cordinates(self):
         return [self.x, self.y]
 
-    def getCoordinatesStr(self):
+    def get_coordinatesStr(self):
         return Template('[$x, $y]').substitute(x=self.x, y=self.y)
 
+    def output(self):
+        return [self.get_cordinates(), self.equiped]
+
     def __str__(self):
-        return self.getCoordinatesStr()
+        return self.get_coordinatesStr()

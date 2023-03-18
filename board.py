@@ -1,4 +1,5 @@
 from string import Template
+from collections import OrderedDict
 
 
 class Board:
@@ -11,7 +12,7 @@ class Board:
         ]
 
     def get_arr_pos(self, x, y):
-        if (x >= self.size or y >= self.size):
+        if ((x >= self.size or y >= self.size) or (x < 0 or y < 0)):
             return None
         else:
             pos = (y * (y + 1)) + x
@@ -52,17 +53,17 @@ class Board:
 
     def getNextMoveCoordinates(self, x, y, direction):
         new_coordinates = None
-        if (direction == 'N'):
-            # move up
-            new_coordinates = [x, y + 1]
-        elif (direction == 'S'):
-            # move down
-            new_coordinates = [x, y - 1]
-        elif (direction == 'E'):
+        if (direction == 'E'):
             # move east
-            new_coordinates = [x - 1, y]
+            new_coordinates = [x, y + 1]
         elif (direction == 'W'):
             # move west
+            new_coordinates = [x, y - 1]  #west
+        elif (direction == 'N'):
+            # move north
+            new_coordinates = [x - 1, y]
+        elif (direction == 'S'):  #south
+            # move south
             new_coordinates = [x + 1, y]
         else:
             raise Exception('Direction must only be one of (N,S,E,W), given',
@@ -77,6 +78,7 @@ class Board:
             knight = target_square['tile']
             item = knight.item
             if (item != None):
+                item.equiped = False
                 item.x = knight.x
                 item.y = knight.y
             target_square['items'].append(item)  #leave items before drowning
@@ -91,7 +93,7 @@ class Board:
 
     def move(self, knight_current_position, direction):
         origin_square = self.squares[knight_current_position]
-        if (origin_square['tile'] != None):
+        if (origin_square != None and origin_square['tile'] != None):
             #knight exists
             knight = origin_square['tile']
             x = knight.x  # horizontal
@@ -115,11 +117,13 @@ class Board:
                 if (knight.item == None and item != None):
                     print('INHERIT ELEMENTS', dest_square['items'], item)
                     print(item)
+                    item.equiped = True
                     knight.item = item
                     dest_square['items'].pop(0)
 
                 #attack
                 dest_defender_knight = dest_square['tile']
+                print('dest_square', '===>', dest_defender_knight)
                 if (dest_defender_knight != None):
                     attack_res = knight.attack(dest_defender_knight)
                     if (attack_res):
@@ -136,6 +140,13 @@ class Board:
                     knight.changeCoordinates(nextMove['x'], nextMove['y'])
                     origin_square['tile'] = None
                     dest_square['tile'] = knight
+
+    def output(self, knights_or_items):
+        output = OrderedDict()
+        for k in knights_or_items:
+            output[k.get_name()] = k.output()
+
+        return output
 
     def __str__(self):
         output = Template('$size => $square')
