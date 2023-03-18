@@ -16,14 +16,14 @@ class Item:
     def get_name(self):
         return self.name.lower()
 
-    def get_cordinates(self):
+    def get_coordinates(self):
         return [self.x, self.y]
 
-    def get_coordinatesStr(self):
+    def get_coordinates_str(self):
         return Template('[$x, $y]').substitute(x=self.x, y=self.y)
 
     def output(self):
-        return [self.get_cordinates(), self.equiped]
+        return [self.get_coordinates(), self.equiped]
 
     def __str__(self):
-        return self.get_coordinatesStr()
+        return self.get_coordinates_str()

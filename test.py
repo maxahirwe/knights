@@ -2,33 +2,44 @@ from board import Board
 from knight import Knight
 from item import Item
 
-board = Board(3)
+import numpy as np
+
+board = Board(8)
+# grouped = np.array_split(board.squares, 8)
+
+# print(board.squares[0])
 
 blue = Knight('Blue', 'B')
 red = Knight('Red', 'R')
+green = Knight('Green', 'G')
 
-knights = [blue]
+# knights = [green]
 
-item = Item('Axe', 'A', 2, 0, 1)
+# item = Item('Axe', 'A', 2, 0, 1)
 
 # print(board)
 # print(board.get_arr_pos(1, 2))
-board.add_knight(blue, 1, 1)
-board.add_item(item, 1, 2)
+board.add_knight(green, 0, 0)
+# board.add_knight(red, 7, 0)
 
-foundKnight = board.find_knight_by_symbol('B')['tile']
+# board.move()
+# board.add_item(item, 1, 2)
 
-print(foundKnight.get_cordinates())
+# foundKnight = board.find_square_by_knight_symbol('G')['tile']
 
-print(board)
+print(foundKnight.get_coordinates())
 
-board.move(board.get_arr_pos(foundKnight.x, foundKnight.y), 'N')
-board.move(board.get_arr_pos(foundKnight.x, foundKnight.y), 'N')
+# print(board)
 
-print(board)
-print(blue)
+board.move('G', 'N')
+# board.move(board.get_square(foundKnight.x, foundKnight.y), 'W')
+# board.move(board.get_square(foundKnight.x, foundKnight.y), 'W')
 
-print(board.output(knights))
+# print(board)
+print(green.get_coordinates())
+# print(red.get_coordinates())
+
+# print(board.output(knights))
 # board.output(knights)
 # board.move(board.get_arr_pos(foundKnight.x, foundKnight.y), 'W')
 

@@ -3,7 +3,7 @@ from string import Template
 
 KNIGHT_STATUSES = ['LIVE', 'DEAD', 'DROWNED']
 DIRECTIONS = ['N', 'E', 'S', 'W']
-SUPRISE_ELEMET_SCORE = 0.5
+SUPRISE_ELEMENT_SCORE = 0.5
 
 
 class Knight:
@@ -23,36 +23,44 @@ class Knight:
 
     def total_attack_score(self):
         attack_points = self.item.attack_points if self.item != None else 0
-        return self.base_attack_score + attack_points if self.status == KNIGHT_STATUSES[
-            0] else 0
+        return self.base_attack_score + attack_points
 
     def total_defend_score(self):
         defend_points = self.item.defend_points if self.item != None else 0
-        return self.base_defend_score + defend_points if self.status == KNIGHT_STATUSES[
-            0] else 0
+        return self.base_defend_score + defend_points
 
-    def attack(self, defender_knight):
-        print('defender_knight', defender_knight)
+    def attack(self, def_knight):
+        # print('defender_knight', defender_knight)
         attacker_total_points = self.total_attack_score(
-        ) + SUPRISE_ELEMET_SCORE
-        defender_total_points = defender_knight.total_defend_score()
+        ) + SUPRISE_ELEMENT_SCORE
+        defender_total_points = def_knight.total_defend_score()
+        print(
+            'attack: knight(%s-%s) status(%s) attacking(%s) VS knight(%s-%s) status(%s) defending(%s) happening at att(%s, %s):def(%s, %s)'
+            % (self.color, self.symbol, self.status, attacker_total_points,
+               def_knight.color, def_knight.symbol, def_knight.status,
+               defender_total_points, self.x, self.y, def_knight.x,
+               def_knight.y))
         return attacker_total_points > defender_total_points
 
-    def changeCoordinates(self, x, y):
+    def change_coordinates(self, x, y):
         self.x = x
         self.y = y
+        if (self.item != None):  # change item position as well
+            self.item.x = self.x
+            self.item.y = self.y
 
-    def get_cordinates(self):
+    def get_coordinates(self):
         return [self.x, self.y] if self.x != None else None
 
-    def get_coordinatesStr(self):
+    def get_coordinates_str(self):
         return Template('[$x, $y]').substitute(x=self.x, y=self.y)
 
     def output(self):
         item_res = self.item.get_name() if self.item else None
         return [
-            self.get_cordinates(), self.status, item_res,
-            self.base_attack_score, self.base_defend_score
+            self.get_coordinates(), self.status, item_res,
+            self.total_attack_score(),
+            self.total_defend_score()
         ]
 
     # def __str__(self):

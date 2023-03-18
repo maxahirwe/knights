@@ -34,7 +34,7 @@ knights = [{
 
 items = [
     {
-        'item': Item('MagicStaff', 'M', 1, 1, 2),
+        'item': Item('MagicStaff', 'M', 1, 1, 2),  # (A, M, D, H) order
         'pos': {
             'x': 5,
             'y': 2
@@ -69,7 +69,8 @@ for k in knights:
 for i in items:
     board.add_item(i['item'], i['pos']['x'], i['pos']['y'])
 
-# add all elemts to the board in their rrspective coordinates/positions
+print('-' * 150)
+# add all elements to the board in their rrspective coordinates/positions
 all_elements = list(map(lambda x: x['knight'], knights))
 all_elements.extend(list(map(lambda x: x['item'], items)))
 
@@ -77,17 +78,14 @@ all_elements.extend(list(map(lambda x: x['item'], items)))
 filename = 'moves.txt'
 lines = open(filename, 'r').read().split('\n')
 
-print(lines)
+# print(board)
 for line in lines:
     if ':' in line:
         set = line.split(':')
-        color = set[0].upper()
+        symbol = set[0].upper()
         direction = set[1].upper()
-        print(board.find_knight_by_symbol(color))
-        square = board.find_knight_by_symbol(color)
-        knight = square['tile'] if square != None else None
-        if (knight != None):
-            board.move(board.get_arr_pos(knight.x, knight.y), direction)
+        if (set != None and symbol != None):
+            board.move(symbol, direction)
 print('-' * 150)
 
 output = board.output(all_elements)
