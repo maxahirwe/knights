@@ -30,19 +30,19 @@
 ## Index File Flow
 
 -   Creates Board 8x8 square "Arena"
--   Creates Knights and add them to board in their initial position
+-   Creates Knights and adds them to the board in their initial position
     -   RED (R) => R (0,0) (top left)
     -   BLUE (B) => (7,0) (bottom left)
     -   GREEN (G) => G (7,7) (bottom right)
     -   YELLOW (Y) => Y (0,7) (top right)
--   Creates Items and add them to board in their initial position
+-   Creates Items and adds them to the board in their initial position
 
     -   Axe (A): +2 Attack => (2,2)
     -   Dagger (D): +1 Attack => (2,5)
     -   Helmet (H): +1 Defence => (5,5)
     -   MagicStaff (M): +1 Attack, +1 Defence => (5,2)
 
--   Print verbose print all actions taking places
+-   Verbose print all actions taking places
 
     -   adding
     -   movements
@@ -74,23 +74,6 @@ python index.js
 ```
 
 ### Readable file format(moves.txt):
-
-GAME-START
-<Knight>:<Direction>
-<Knight>:<Direction>
-<Knight>:<Direction>
-.
-.
-.
-GAME-END
-For example:
-GAME-START
-R:S
-R:S
-B:E
-G:N
-Y:N
-GAME-END
 
 ## Author
 
