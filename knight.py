@@ -18,19 +18,22 @@ class Knight:
         self.x = None
         self.y = None
 
+    # get knight name
     def get_name(self):
         return self.color.lower()
 
+    # get knight's total attack score
     def total_attack_score(self):
         attack_points = self.item.attack_points if self.item != None else 0
         return self.base_attack_score + attack_points
 
+    # get knight's total defend score
     def total_defend_score(self):
         defend_points = self.item.defend_points if self.item != None else 0
         return self.base_defend_score + defend_points
 
+    # perfoms an attack on a defender knight and evalutates the winer/looser, returns boolean
     def attack(self, def_knight):
-        # print('defender_knight', defender_knight)
         attacker_total_points = self.total_attack_score(
         ) + SUPRISE_ELEMENT_SCORE
         defender_total_points = def_knight.total_defend_score()
@@ -42,6 +45,7 @@ class Knight:
                def_knight.y))
         return attacker_total_points > defender_total_points
 
+    # change x,y coordinates
     def change_coordinates(self, x, y):
         self.x = x
         self.y = y
@@ -49,12 +53,15 @@ class Knight:
             self.item.x = self.x
             self.item.y = self.y
 
+    # get x,y coordinates
     def get_coordinates(self):
         return [self.x, self.y] if self.x != None else None
 
+    # get x,y coordinates in string format
     def get_coordinates_str(self):
         return Template('[$x, $y]').substitute(x=self.x, y=self.y)
 
+    # generate output for console and file extration
     def output(self):
         item_res = self.item.get_name() if self.item else None
         return [
@@ -62,6 +69,3 @@ class Knight:
             self.total_attack_score(),
             self.total_defend_score()
         ]
-
-    # def __str__(self):
-    #     return self.getCoordinatesStr()
