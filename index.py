@@ -34,7 +34,8 @@ knights = [{
 
 items = [
     {
-        'item': Item('MagicStaff', 'M', 1, 1, 2),  # (A, M, D, H) order
+        'item': Item('MagicStaff', 'M', 1, 1,
+                     2),  # (A, M, D, H) priority order
         'pos': {
             'x': 5,
             'y': 2

@@ -13,15 +13,19 @@ class Item:
         self.y = None
         self.equiped = False
 
+    # get item name
     def get_name(self):
         return self.name.lower()
 
+    # get x,y coordinates
     def get_coordinates(self):
         return [self.x, self.y]
 
+    # get x,y coordinates in string format
     def get_coordinates_str(self):
         return Template('[$x, $y]').substitute(x=self.x, y=self.y)
 
+    # generate output for console and file
     def output(self):
         return [self.get_coordinates(), self.equiped]
 

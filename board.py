@@ -5,18 +5,21 @@ import numpy as np
 
 class Board:
 
+    # initialization of the board based on needed size
     def __init__(self, size):
         self.size = size
         self.square_size = size**2
         self.squares = np.array_split(
             [dict(tile=None, items=[]) for x in range(self.square_size)], 8)
 
+    # get a square based on x,y 2d coordinates
     def get_square(self, x, y):
         if ((x >= self.size or y >= self.size) or (x < 0 or y < 0)):
             return None
         else:
             return self.squares[x][y]
 
+    # add knight to the board at provided coordidates
     def add_knight(self, knight, x_pos, y_pos):
         square = self.get_square(x_pos, y_pos)
         if (square == None):
@@ -35,12 +38,14 @@ class Board:
                 Template("position [$x,$y] already has an knight").substitute(
                     x=x_pos, y=y_pos))
 
+    # sort items on each board square per priority
     def sort_items(self, square):
         square['items'] = sorted(
             square['items'],
             key=lambda x: x.ordering,
         )  #sort by ordering
 
+    # add items to the board at provided coordidates
     def add_item(self, item, x_pos, y_pos):
         square = self.get_square(x_pos, y_pos)
         square['items'].append(item)
@@ -51,12 +56,11 @@ class Board:
               (item.name, item.symbol, item.x, item.y, item.attack_points,
                item.defend_points))
 
+    # searches the first square on the board that contains a knight with a given symbol (ex:R OR B)
     def find_square_by_knight_symbol(self, symbol):
         square = None
         for squareGroup in self.squares:
-            # print('group size', len(squareGroup), square)
             if (square != None):
-                # print('found')
                 break
             square = next(
                 (x for x in squareGroup
@@ -64,7 +68,8 @@ class Board:
 
         return square
 
-    def getNextMoveCoordinates(self, x, y, direction):
+    # identifies the next move/square/coordinates based on current x,y coordinates and the direction(N,E,S,W)
+    def get_next_move_coordinates(self, x, y, direction):
         new_coordinates = None
         if (direction == 'E'):
             # move east
@@ -90,7 +95,8 @@ class Board:
                    to=[new_x, new_y])
         return res
 
-    def changeKnightStatus(self, dest_square, status):
+    # changes a knight's status to DROWNED OR DEAD
+    def change_knight_status(self, dest_square, status):
         ACCEPTED_STATUSES = ['DROWNED', 'DEAD']
         if (dest_square['tile'] != None and status in ACCEPTED_STATUSES):
             knight = dest_square['tile']
@@ -122,24 +128,23 @@ class Board:
         else:
             raise Exception('Unsopported status')
 
+    # moves a knights accross the board
     def move(self, symbol, direction):
+        """
+        moves a knights accross the board
+        symbol: knight symbol, can be one of (R,B,G,Y)
+        direction: movement direction, can be one of (N,S,E,W)
+        """
         origin_square = self.find_square_by_knight_symbol(symbol)
-        # print('found', self.find_square_by_knight_symbol(symbol))
-        # print(origin_square['tile'])
-        # origin_square = self.squares[knight_current_position]
         if (origin_square != None):
             #knight exists
             knight = origin_square['tile']
-            # current_position = self.get_square(knight.x, knight.y)
-            nextMove = self.getNextMoveCoordinates(
-                knight.x,
-                knight.y,  #TODO  ISSUE HERE FINDING THE NEXT POST
-                direction)
-            # print('nextMove', nextMove)
+            nextMove = self.get_next_move_coordinates(knight.x, knight.y,
+                                                      direction)
             dest_square = nextMove['dest_square']
             if (dest_square == None):
                 # tile does not exist drowning
-                self.changeKnightStatus(origin_square, 'DROWNED')
+                self.change_knight_status(origin_square, 'DROWNED')
             else:
                 # tile exist
                 dest_items = dest_square['items']
@@ -161,8 +166,8 @@ class Board:
                 if (def_knight != None):
                     attack_res = knight.attack(def_knight)
                     if (attack_res):
-                        # attacker win, movement
-                        self.changeKnightStatus(dest_square, 'DEAD')
+                        # attacker wins, movement
+                        self.change_knight_status(dest_square, 'DEAD')
                         origin_square['tile'] = None
                         dest_square['tile'] = knight
                         print(
@@ -178,7 +183,7 @@ class Board:
                         knight.change_coordinates(nextMove['x'], nextMove['y'])
                     else:
                         # defender win, no movement
-                        self.changeKnightStatus(origin_square, 'DEAD')
+                        self.change_knight_status(origin_square, 'DEAD')
                         origin_square['tile'] = None
                         print(
                             'stayed-defender win: knight(%s-%s) with attack(%s) vs defense(%s)'
@@ -194,6 +199,7 @@ class Board:
                     origin_square['tile'] = None
                     dest_square['tile'] = knight
 
+    # output that provides status for all items on board
     def output(self, knights_or_items):
         output = OrderedDict()
         for k in knights_or_items:
