@@ -1,5 +1,32 @@
 # KnightsBoard
 
+## Installation
+
+-   In project root folder
+-   Install Python https://www.python.org/downloads/ (Used 3)
+-   Install Pip (if you don't have it already installed) with the following commands
+
+```
+  curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+```
+
+```
+  python3 get-pip.py
+```
+
+```
+  pip install numpy
+```
+
+## Testing
+
+```
+python3 index.py
+```
+
+-   Observe console output
+-   Inspect generated JSON file (![final_state](/outputs/final_state.json))
+
 ## Classes
 
 -   **Board**: Symbolized the game board and has methods for various board:
@@ -61,26 +88,6 @@
     -   status changes
 
 -   Generates output file (/outputs/final_state.json)
-
-## Installation
-
--   Install Python https://www.python.org/downloads/ (Used 3)
--   Install Pip https://pip.pypa.io/en/stable/installation/
-
-## Testing
-
--   Choose one command based on installed python:
-
-    ```
-    python3 index.py
-    ```
-
-    ```
-    python index.py
-    ```
-
--   Observe console output
--   Inspect generated JSON file (![final_state](/outputs/final_state.json))
 
 ## Documentation
 
