@@ -7,15 +7,15 @@
 -   Install Pip (if you don't have it already installed) with the following commands
 
 ```
-  curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 ```
 
 ```
-  python3 get-pip.py
+python3 get-pip.py
 ```
 
 ```
-  pip install numpy
+pip install numpy
 ```
 
 ## Testing
