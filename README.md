@@ -25,7 +25,7 @@ python3 index.py
 ```
 
 -   Observe console output
--   Inspect generated JSON file (![final_state](/outputs/final_state.json))
+-   Inspect generated JSON file ([final_state](/outputs/final_state.json))
 
 ## Classes
 
