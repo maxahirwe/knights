@@ -2,7 +2,7 @@
 
 ## Installation
 
--   In project root folder
+-   Go In project root folder
 -   Install Python https://www.python.org/downloads/ (Used 3)
 -   Install Pip (if you don't have it already installed) with the following commands
 
