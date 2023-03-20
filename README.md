@@ -2,7 +2,7 @@
 
 ## Classes
 
--   **Board**: Symbolized the game board and has methods for various board:
+-   **Board**: Symbolizes the game board and has methods for various board:
 
     -   `get_square`: get a square based on (X,Y) 2d coordinates.
     -   `add_knight`: add knight to the board at provided coordidates.
@@ -38,10 +38,10 @@
 
 -   Creates Knights and adds them to the board in their initial positions
 
-    -   RED (R) => R (0,0) (top left)
+    -   RED (R) => (0,0) (top left)
     -   BLUE (B) => (7,0) (bottom left)
-    -   GREEN (G) => G (7,7) (bottom right)
-    -   YELLOW (Y) => Y (0,7) (top right)
+    -   GREEN (G) => (7,7) (bottom right)
+    -   YELLOW (Y) => (0,7) (top right)
 
 -   Creates Items and adds them to the board in their initial positions
 
