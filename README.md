@@ -2,7 +2,7 @@
 
 ## Installation
 
--   Go In project root folder
+-   Go In the project root folder
 -   Install Python https://www.python.org/downloads/ (Used 3)
 -   Install Pip (if you don't have it already installed) with the following commands
 
@@ -29,34 +29,34 @@ python3 index.py
 
 ## Classes
 
--   **Board**: Symbolizes the game board and has methods for various board:
+-   **Board**: Symbolizes the game board and has methods for the board:
 
-    -   `get_square`: get a square based on (X,Y) 2d coordinates.
-    -   `add_knight`: add knight to the board at provided coordidates.
-    -   `sort_items`: sort items on each board square per priority.
-    -   `add_item`: add items to the board at provided coordidates.
-    -   `find_square_by_knight_symbol`: searches the first square on the board that contains a knight with a given symbol (ex:R OR B).
-    -   `get_next_move_coordinates`: identifies the next move/square/coordinates based on current (X,Y) coordinates and the direction(N,E,S,W).
+    -   `get_square`: get a square based on (X, Y) 2d coordinates.
+    -   `add_knight`: add knight to the board at provided coordinates.
+    -   `sort_items`: Sort items on each square on the board, considering priority.
+    -   `add_item`: add items to the board at the provided coordinates.
+    -   `find_square_by_knight_symbol`: searches the first square on the board that contains a knight with a given symbol (ex: R OR B).
+    -   `get_next_move_coordinates`: identifies the next move/square/coordinates based on current (X, Y) coordinates and the direction(N, E, S, W).
     -   `change_knight_status`: changes a knight's status to DROWNED OR DEAD.
-    -   `move`: moves a knights accross the board.
-    -   `output`: output that provides status for all items on board.
+    -   `move`: moves a knight across the board.
+    -   `output`: output status for all items on board.
 
 -   **Knight**: Symbolises a knight used to play across the board:
 
     -   `get_name`: get knight name.
-    -   `total_attack_score`: get knight's total attack score.
-    -   `total_defend_score`: get knight's total defend score.
-    -   `attack`: perfoms an attack on a defender knight and evalutates the winer/looser, returns boolean.
-    -   `change_coordinates`: change (X,Y) coordinates.
-    -   `get_coordinates`: get (X,Y) coordinates.
-    -   `get_coordinates_str`: get (X,Y) coordinates in string format.
-    -   `output`: generate output for console and file extration.
+    -   `total_attack_score`: get the knight's total attack score.
+    -   `total_defend_score`: get the knight's total defense score.
+    -   `attack`: performs an attack on a defender knight, evaluates the winer/loser, and returns a boolean.
+    -   `change_coordinates`: change (X, Y) coordinates.
+    -   `get_coordinates`: get (X, Y) coordinates.
+    -   `get_coordinates_str`: get (X, Y) coordinates in string format.
+    -   `output`: generate output for console and file extraction.
 
--   **Item**: Symbolises an Item that knights can earn to boosts their defending/attack score:
+-   **Item**: Symbolises an Item that knights can earn to boost their defending/attack score:
 
     -   `get_name`: get item name.
-    -   `get_coordinates`: get (X,Y) coordinates.
-    -   `get_coordinates_str`: get (X,Y) coordinates in string format.
+    -   `get_coordinates`: get (X, Y) coordinates.
+    -   `get_coordinates_str`: get (X, Y) coordinates in string format.
     -   `output`: generate output for console and file.
 
 ## Index File Process Flow
