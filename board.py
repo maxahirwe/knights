@@ -19,7 +19,7 @@ class Board:
         else:
             return self.squares[x][y]
 
-    # add knight to the board at provided coordidates
+    # add knight to the board at provided coordinates
     def add_knight(self, knight, x_pos, y_pos):
         square = self.get_square(x_pos, y_pos)
         if (square == None):
@@ -45,7 +45,7 @@ class Board:
             key=lambda x: x.ordering,
         )  #sort by ordering
 
-    # add items to the board at provided coordidates
+    # add items to the board at provided coordinates
     def add_item(self, item, x_pos, y_pos):
         square = self.get_square(x_pos, y_pos)
         square['items'].append(item)
